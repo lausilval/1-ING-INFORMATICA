@@ -1,0 +1,192 @@
+RECURSIVIDAD:
+
+### EJERCICIO 2022 ###
+# Definir a función c3 cadena de n bits que contienen 3 o mas ceros consecutivos
+def c3(n):
+    if n <= 2: return []
+    else:
+        comb = [''.join(p) for p in Permutations('01'*(n-3),n-3)]
+        return ['000'+c for c in comb] + ['001'+c for c in c3(n-3)] + ['01'+c for c in c3(n-2)] + ['1'+c for c in c3(n-1)]
+
+### EJERCICIO 2021 ###
+# Definir la funcion pan que nos devuelve la lista de combinaciones de longitud n donde nunca vayan dos mujeres consecutivas
+def pan(n):
+    if n == 0: return ['']
+    elif n == 1:
+        return['h', 'm']
+    else:
+        return ['h'+c for c in pan(n-1)] + ['mh'+c for c in pan(n-2)]
+
+### EJERCICIO ENERO 2020 ###
+# Definir la funcion cat que dada la longitud de la lista nos devolva todas as cadea formadas por n ceros e n uns de xeito que, contando dende a esquerda, nunca o número de ceros superé ó número de uns.
+def cat(n):
+    if n == 0: return['']
+    else:
+        sol = []
+        for i in [1..n]:
+            sol += ['1'+x + '0'+y for x in cat(i-1) for y in cat(n-i)]
+        return sol
+
+### EJERCICIO ENERO 2020 ###
+# Definir a función revolver mediante un algoritmo recursivo que aplicada a unha cadea nos devolva outra cadea formada polos mesmos caracteres da cadea inicial pero en orden inverso. Por exemplo, revolver(’abc’) = ’cba’.
+def revolver(s):
+    n = len(s)
+    if n == 0: return s
+    else:
+        return s[-1] + revolver(s[:-1])
+
+### EJERCICIO JULIO 2020 ###
+# Define a función M que aplicada a dous números enteiros non negativos, a e b devolve o seu máximo común divisor
+def M(a,b):
+    if b == 0: return a
+    else:
+        return M(b, a%b)
+# MINIMO COMUN MULTIPLO!
+def m(a,b):
+    if M(a,b) == 1:
+        return a*b
+    else:
+        return M(a,b)*m(a/M(a,b), b/M(a,b))
+#
+def m(a,b):
+    if gcd(a,b) == 1:
+        return a*b
+    else:
+        return gcd(a,b)*m(a/gcd(a,b), b/gcd(a,b))
+
+### EJERCICIO 2016 ###
+#Define de modo recursivo a función bino que para cada par de números enteiros non negativos, (n,k), nos devolva 0, se n<k, e o coeficiente binomial, nck, noutro caso
+def bino(n,k):
+    if n < k: return 0
+    elif k == 0: return 1
+    else:
+        return bino(n-1,k-1) + bino(n-1,k)
+#
+def bin(n,k):
+    if n < k: return 0
+    elif n == k: return 1
+    else: return(n/(n-k))*bin(n-1, k)
+#
+bino(14,7) == bin(14,7)  == binomial(14,7)
+
+
+### EJERCICIO 2015 ###
+# Define de modo recursivo a función power2 que para cada par de números enteiros non negativos, (a,n), nos devolva a^{2^n}
+def power2(a,n):
+    if n == 0: return a 
+    else: return pow(a,pow(2,n))
+#
+def power2(a,n):
+    if n == 0: return a
+    else: return power2(a,n-1)^2
+
+## Sucesion de FIBONACCI
+def F(n):
+    if n == 0:
+        return 0
+    elif n == 1:
+        return 1
+    else:
+        return F(n-1) + F(n-2)
+
+## Torres de HANNOI
+def han(n):
+    if n == 0: return 0               # é a condición inicial. (Tamén poderiamos ter collido H1 = 0)
+    else: return 2*han(n-1) + 1       # recorrencia
+#
+for n in [1..20]:
+    print ('para ', n, ' discos, necesítanse',han(n), ' movementos')
+
+## MAXIMO COMUN DIVISOR
+def mcd(a, b):
+    if b == 0: return a
+    else: return mcd(b, a%b)             # algoritmo de Euclides
+
+
+## Cambiar un nº de base
+def Cif(n, b):
+    if n < b: return str(n)                     # se n<b, o cociente enteiro n/b será 0
+    else: return Cif(n//b,b) + str(n%b)   # calculamos as cifras de n//b e engadímoslle
+                                                # a menos significativa, que era n modulo b
+
+# Definiremos agora a función NUM que recupera o número en decimal a partir da súa representación nunha base b, b ≤ 26.
+def NUM(s,b):
+    guarismos ='0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    if len(s) == 1: return guarismos.find(s)                  # a posición que ocupa a cifra dentro de guarismos
+    else: return NUM(s[:-1], b) * b + guarismos.find(s[-1])   # pensar que, en base b, 'xyzt' = 'xyz0' + 't' = 'xyz'*b + 't'
+
+
+## Cadenas de n bits sin ceros consecutivos
+def kdas(n):
+    if n == 1: return ['0','1']                   # a lista con todas as cadeas de 1 bit sen ceros consecutivos
+    elif n == 2: return ['01','10','11']          # a lista con todas as cadeas de 2 bits sen ceros consecutivos
+    else: return [c + '10' for c in kdas(n-2)] + [c +'1' for c in kdas(n-1)]
+
+## Cadenas de n bits con tres unos consecutivos
+def C(n):
+    if n == 1: return 0
+    elif n == 2: return 0
+    elif n == 3: return 1
+    else:
+        return C(n-1) + C(n-2) + C(n-3) + 2^(n-3)
+
+## FUncion que construye cadenas n bits sin k ceros consecutivos
+def cerosnoconsecutivos(n,k):
+    if k == 1: return['1'*n]
+    if n == 1: return['0', '1']
+    elif n <= k:
+        principio = Permutations('0'*(k-1) + '1'*n, n)
+        return [''.join(p) for p in principio]
+    else:
+        cadena = []
+        for i in range(k):
+            cadena += ['0'*i + '1'+s for s in cerosnoconsecutivos(n-1-i, k)]
+            return cadena
+
+def unosnoconsecutivos(n,k):
+    if k == 1: return['0'*n]
+    if n == 1: return['1', '0']
+    elif n <= k:
+        principio = Permutations('1'*(k-1) + '0'*n, n)
+        return [''.join(p) for p in principio]
+    else:
+        cadena = []
+        for i in range(k):
+            cadena += ['1'*i + '0'+s for s in unosnoconsecutivos(n-1-i, k)]
+            return cadena
+
+
+## Funcion que dados r y n, nos devuelve la cantidad de particiones de r con n numeros
+def p(r,n):
+    if n<1 or r<n: return 0
+    elif n==1 and r >=1:
+        return 1
+    else:
+        return p(r-1, n-1) + p(r-n,n)
+
+## Funcion cadena de n bits que contiene dos ceros consecutivos
+def c2(n):
+    if n <= 1: return []
+    else:
+        comb = [''.join(p) for p in Permutations('01'*(n-2),n-2)]
+        return ['00'+c for c in comb] + ['10'+c for c in c2(n-2)] + ['1'+c for c in c2(n-1)]
+
+## Funcion cadena de n bits que contiene dos unos consecutivos
+def c1dos(n):    ###NO ESTÁ BIEN
+    if n <= 1: return [] 
+    else:
+        comb = [''.join(p) for p in Permutations('01'*(n-2),n-2)]
+        return ['11'+c for c in comb] + ['01'+c for c in c2(n-2)] + ['1'+c for c in c2(n-1)]
+#
+def nodosunos(x):
+    return [''.join(i) for i in cerosnoconsecutivos(3,3) if '11' in ''.join(i)]
+
+## CADENAS de longitud n que empiezan por 11
+def cadenas11(n):
+    return ['11' + ''.join(p) for p in Permutations('01'*(n-2),n-2)]
+
+## CADENAS de n bits sin dos o mas ceros consecutivos
+def cadenas00(n):
+    todas = [''.join(p) for p in Permutations('01'*n, n)]
+    verdad = [x for x in todas if not '00' in x]
+    return verdad

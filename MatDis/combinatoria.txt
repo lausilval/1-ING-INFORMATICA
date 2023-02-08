@@ -1,0 +1,385 @@
+COMBINATORIA:
+
+#-------------------------------ENERO2022------------------------------------------
+#### EJERCICIO 1 ####
+# Listas capicuas con longitud menor igual a 3
+
+l1 = [[i] for i in srange(10)]
+l2 = [[i,i] for i in srange(10)]
+l3 = [[i,j,i] for i in srange(10) for j in srange(10)]
+pal_3 = []
+pal_3.extend(l1)
+pal_3.extend(l2)
+pal_3.extend(l3)
+
+#### EJERCICIO 2 ####
+# Definir funcion e_pal que duelve True or False si es capicua o no
+def e_pal(L):
+    lon = len(L)
+    for i in srange(lon/2):
+        if L[i] != L[lon-1-i]:
+            return False
+    return True
+
+#### EJERCICIO 3 ####
+# Definir la funcion list2num que dada una lista de elementos lo convierte a numeros
+def list2num(L):
+    L.reverse()
+    return ZZ(L, 10)
+
+l = [4,5,6]
+l.reverse()
+ZZ(l,10)
+
+#### EJERCICIO 4 ####
+# Definir funcion sumcap que dado un numero nn devuelve la suma de todos los numeros capicuas, menores o iguales que nn
+def sumcap(n):
+    return sum([i for i in srange(n) if e_pal(i.digits())])
+
+
+#---------------------------------------ENERO2021---------------------------------
+#### EJERCICIO 1 ####
+# Construir la lista formada por las cadenas que representan todas las meneras en las que 3 hombres y dos mujeres pueden hacer cola sin que dos mujeres vayan seguidas en la cola
+H3M2 = [''.join(i) for i in Permutations('hhhmm') if not 'mm' in ''.join(i)]
+
+# Definir funcion boa que confirma que las cadenas anteriores esten bien
+def boa(c):
+    n = len(c)
+    for i in range(n-1):
+        if 'm'== c[i] == c[i+1]:
+            return False
+    return True
+#
+def boa(c):
+    if 'mm' in c:  return False
+    else: return True
+
+# Define a funcion colas que dadas a hombres y b mujeres devuelve la lista con las cadenas sin que haya dos mujeres consecutivas
+def colas(a,b):
+    l = [''.join(i) for i in Permutations('h'*a + 'm'*b) if not 'mm' in ''.join(i)]
+    return l
+
+
+#---------------------------------ENERO2020-------------------------------------
+#### EJERCICIO 1 ####
+# Construir todas las listas que representen las posibles colocaciones de 4 monedas en un tablero de 4x4 sin que haya dos situadas en cuadros contiguos
+perm = Permutations(4)
+C4x4 = []
+vale = True
+for i in perm:
+    vale = True
+    for n in range(0, 3):
+        if i[n] + 1 == i[(n+1)] or i[n] - 1 == i[(n+1)]:
+            vale = False
+    if vale:
+        C4x4.append(i)
+
+# Lo mismo pero con cadenas en vez de con listas
+C4x4 = [''.join(p) for p in Permutations('1234') if abs(Integer(p[1])-Integer(p[0]))>1 and abs(Integer(p[1])-Integer(p[2]))>1 and abs(Integer(p[2])-Integer(p[3]))>1]
+
+## Funcion que comprueba que la lista anterior está bien hecha
+def testcadena(s):
+    i = 0
+    cadena = ''
+    while i < (len(s)-1):
+        if abs(Integer(s[i])-Integer(s[i+1]))<2 or s[i] in cadena:
+            return False
+        cadena += s[i]
+        i += 1
+    if s[i] in cadena:
+        return False
+    return True
+#
+def testlista(L):
+    i = 0
+    for n in range(len(L) - 1):
+        if L[i] + 1 == L[(i+1)] or L[i] - 1 == L[(i+1)]:
+            return False
+        i += 1
+
+    return True
+
+#### EJERCICIO 2 ####
+# Definir a funcion reis que dado un numero natural n > 3 nos devuelve todas las maneras de colocar las n monedas en una tabla nxn sin que haya monedas contiguas
+#### PARA LISTAS !!
+def reislista(n):
+    perm = Permutations(n)
+    res = []
+    for i in perm:
+        if testlista(i):
+            res.append(i)
+    return res
+
+#### PARA CADENAS !!
+def reiscadena(n):
+    cadena = ''
+    for i in [1..n]:
+        cadena += str(i)
+    return [''.join(p) for p in Permutations(cadena) if testcadena(p)]
+
+### De cuantas maneras se pueden situar 8 reis sin que no esten ni en la misma fila ni en la misma columna
+len(reis(8))
+
+
+#### EJERCICIO 3 ####
+# Exponenciación binaria
+# Definir la funcion exp_bin para este algoritmo
+# copiado directamente do algoritmo exp_mod da práctica 05.aritmética_modular.sagews
+def exp_bin(b,e,n):
+    E = e.digits(2)                 # a lista de cifras de e en base 2
+    t = len(E)                      # a cantidade de cifras
+    base = mod(b,n)                 # as operacións, a partir de aquí, son en aritmética modular
+    num = 1                         # para irmos multiplicando os valores que imos construíndo
+    for i in range(t):
+        if E[i] == 1:               # se a correspondente cifra é 1
+            num *= base             # multiplicamos pola base
+        base *= base                # elevando a base ao cadrado
+    return num
+
+#-------------------------------JULIO2020--------------------------------------
+#### EJERCICIO 1 ####
+# Construir la lista M100_579 dos numeros enteros positivos menores o iguales que 100 que no son divisibles por ningun dos numeros 5, 7 e 9
+M100_579 = [i for i in range(101) if (i%5!=0 and i%7!=0 and i%9!=0)]
+# otra forma de hacerlo:
+M100_579 = [i for i in range(101) if gcd(i, 5*7) == 1 and i%9!=0]
+## Determina la cantidad de la lista anterior 
+len(M100_579)
+
+# Define la funcion Dn_579 que cojido un nº n nos devuelve la lista de los primeros n numeros enteros positivos que no son divisibles por ningun de los numeros 5, 7, 9 y calcula el valor de Dn_579 para algunos nºs pequeños
+def Dn_579(n):
+    lista = []
+    i = 0
+    while len(lista)!=n:
+        if(i%5!=0 and i%7!=0 and i%9!=0):
+            lista.append(i)
+        i += 1
+    return lista
+#
+def Dn_579_v2(n):
+    lista = []
+    i = 1
+    for j in range(n):
+        while gcd(i, 5*7)!=1 or i%9 == 0:
+            i += 1
+        lista.append(i)
+        i += 1
+    return lista
+
+# Comprobacion de que las dos cosas de los dos apartados estan bien
+Dn_579(60) == M100_579
+
+#### EJERCICIO 2 ####
+# Define la funcion test que cogido un numero k y una lista L de numeros nos devuelve True si k no es divisible por ninguno de los numeros de L
+def test_v1(k, L):
+    tst = True
+    for i in L:
+        tst = tst and k%i !=0
+    return tst
+#
+def test_v2(k, L):
+    for i in L:
+        if k%i == 0:
+            return False
+    return True
+
+# Define la funcion Dn_L que cogido un numero n y una lista L nos devuelve los n primeros numeros enteros positivos que no son divisibles por ninguno de los numeros de L
+def Dn_L(n,L):
+    lista = []
+    con = 0
+    k = 1
+    while con < n :
+        if test(k,L):     ## Funcion del ejercicio anterior
+            lista.append(k)
+            con += 1
+        k += 1
+    return lista
+
+#--------------------------JULIO2015------------------------------------------
+#### EJERCICIO 1 ####
+# Construir todas las listas capicuas de longitud menor o igual a 4 cuyos elementos son numeros digitos
+l1 = [[i] for i in range(10)]
+l2 = [[i,i] for i in range(10)]
+l3 = [[i,j,i] for i in range(10) for j in range(10)]
+l4 = [[i,j,j,i] for i in range(10) for j in range(10)]
+l = l1 + l2 + l3 + l4
+#
+L = []
+for i in [0..9]:
+    L.append(i)
+    L.append([i,i])
+    for j in [0..9]:
+        L.append([i,j,i])
+        L.append([i,j,j,i])
+
+#### EJERCICIO 2 ####
+# Define la funcion p3p coge una lista de 3 elementos y devuelve la lista de longitud 6 capicua
+def p3p(L):
+    return [L[0], L[1], L[2], L[2], L[1], L[0]]
+#
+def p3p_v2(L):
+    Linv=[L[2],L[1],L[0]]
+    return L + Linv
+
+# Define la funcion palin(L) que hace una lista capicua añadiendo los elementos por el final
+def palin(L):
+    lon = len(L)
+    l = [L[lon-1-i] for i in range(lon)]
+    return L + l
+#
+def palin_v2(L):
+    x = L[:]
+    x.reverse()
+    return L + x
+#
+def pal_2n(L):
+    pal2n = []
+    w = len(L)
+    for i in [0..len(L)-1]:
+        pal2n.append(L[i])
+    for i in [0..len(L)-1]:
+        pal2n.append(L[(len(L)-1)-i])
+    return pal2n
+
+# Define la funcion palindro que dado un numero n nos fabrica todas las listas capicuas de esa longitud
+
+def escapicua(L):
+    lon = len(L)
+    for i in srange(lon/2):
+        if L[i] != L[lon-1-i]:
+            return False
+    return True
+#
+def palindro(n):
+    lista = Permutations(srange(10)*n, n).list()
+    return [x for x in lista if escapicua(x)]
+
+#### EJERCICIO 3 ####
+# Define la funcion nu que transforma una lista de numeros a un numero
+def nu(L):
+    n = len(L)
+    num = 0
+    for i in range(n):
+        num += L[i]*10^(n-1-i)
+    return num
+#
+def nu(L):
+    L.reverse()
+    return ZZ(L, 10)
+
+# Define la funcion sumcap(n) dado un numero devuelve la suma de todos los numeros capicuas menores o iguales a n
+def sumcap(n):
+    return sum([i for i in srange(n) if escapicua(i.digits())])
+
+
+#---------------------------------ENERO 2016 ----------------------------------
+def pal_x(n):
+    perm = Permutations(n*srange(10),n)
+    lista = []
+    a = n/2
+    if n == 0:
+        return []
+    elif n == 1:
+        for s in perm:
+            lista.append(s)
+    elif n == 2: 
+        for r in perm2:
+            if r[0] == r[1]:
+                lista.append(r)
+    else:
+        for m in perm:
+            i=0
+            j = n-1
+            while i!=j and m[i] == m[j]:
+                i = i+1
+                j = j-1
+                if j == i:
+                    lista.append(m)
+    return lista
+#
+def pal_x(n):   ###### CADENAS !!!
+    L=[] 
+    cont  = 0
+    for i in Permutations(n*'0123456789', n):
+        cont=0
+        for j in range(n//2):
+            if i[j] == i[(n-1)-j]:
+                cont += 1
+        if cont == (n//2):
+            L.append(''.join(i))
+    return L
+#
+def pal_n(L):
+    n = len(L)
+    x = n-1
+    lista = []
+    for i in srange(n):
+        lista.append(L[i])
+    while x >= 0:
+        lista.append(L[x])
+        x = x-1
+    return lista
+#
+def de_list_a_num(L):
+    n = len(L)
+    i = 0
+    j = n
+    suma = 0
+    while i < n:
+        suma = suma + (L[i]*pow(10,j-1))
+        i = i+1
+        j = j-1
+    return suma
+
+#----------------- OTROS AÑOS -------------------------------------------------
+
+## PREGUNTA 1
+# Construye todas las listas de longitud 7 formadas con nºs de una cifra con la condicion que el producto de sus elementos sea 35 = 7*5
+X35 = [''.join(p) for p in Permutations('1111157')]
+len(X35)
+#
+L30 = []
+for p in Permutations('1111235'):
+    L30.append(''.join(p))
+for p in Permutations('1111165'):
+    L30.append(''.join(p))
+
+## PREGUNTA 2
+# Define una funcion que tome un par de numeros (b,c) y devuelva todas las listas de 7 digitos cuyo producto sea (5b)*(7c)
+def listas75(b,c):
+    if (b+c) > 7 :
+        return []
+    else:
+        return [''.join(p) for p in Permutations(b*'5' + c*'7' + (7-b-c)*'1')]
+
+## PREGUNTA 3
+# Define una funcion para dos numeros k,n que devuelva todas las listas de longitud k formadas con digitos cuyo producto es n, sabiendo que los unicos primos que dividen a n son 5 y 7
+def listillas75(k,n):
+    if 7^k<n: return []
+    w = n
+    cinco = 0
+    siete = 0
+    while w > 1:
+        if w%5 == 0 :
+            cinco += 1
+            w = w/5
+        if w%7 == 0:
+            siete += 1
+            w = w/7
+    return [''.join(p) for p in Permutations(cinco*'5' + siete*'7' + (k-cinco-siete)*'1', k)]
+
+## CADENAS de longitud n que empiezan por 11
+def cadenas11(n):
+    return ['11' + ''.join(p) for p in Permutations('01'*(n-2),n-2)]
+
+## CADENAS de n bits sin dos o mas ceros consecutivos
+def cadenas00(n):
+    todas = [''.join(p) for p in Permutations('01'*n, n)]
+    verdad = [x for x in todas if not '00' in x]
+    return verdad
+
+'''
+En combinatoria 7 estan los ejs de horizontal y vertical
+
+En combinatoria 6 estan los ejs del torneo ademas tambn en un pocoTodo
+
+'''
