@@ -1,0 +1,3 @@
+Manolo | Comirnarty ;2; Chiroflu ;3; Pneumovax ;1
+Pepe | Comirnarty ;1
+Juan | Chiroflu ;2; Pneumovax ;1
